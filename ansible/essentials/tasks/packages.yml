@@ -1,0 +1,19 @@
+- name: install packages
+  ansible.builtin.apt:
+    update_cache: yes
+    name:
+      - build-essential
+      - bat            
+      - fd-find
+      - fzf
+      - git
+      - htop
+      - iotop
+      - lm-sensors
+      - plocate
+      - ripgrep
+      - smartmontools
+      - sudo
+      - zsh
+    state: present
+  become: yes
