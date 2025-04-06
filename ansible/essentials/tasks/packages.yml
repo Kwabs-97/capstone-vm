@@ -6,14 +6,11 @@
       - bat            
       - fd-find
       - fzf
-      - git
-      - htop
       - iotop
       - lm-sensors
       - plocate
       - ripgrep
       - smartmontools
-      - sudo
       - zsh
     state: present
   become: yes

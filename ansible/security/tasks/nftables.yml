@@ -1,0 +1,17 @@
+- name: start nftables and enable on boot
+  ansible.builtin.systemd:
+    name: nftables
+    state: started
+    enabled: yes
+  become: yes
+
+- name: nftables.conf
+  ansible.builtin.copy:
+    src: files/nftables.conf
+    dest: /etc/nftables.conf
+    owner: root
+    group: root
+    mode: '644'
+    backup: yes
+  become: yes
+  notify: restart nftables

@@ -16,7 +16,7 @@ SSH_DELI_END="#### end azure ssh config ####"
 
 # Azure config
 RESOURCE_GROUP="myResourceGroup" 
-SSH_USER="azureuser"
+SSH_USER="kwabs"
 
 log_info()    { printf "${BLUE} [azure] ${NC} %s\n" "$1"; }
 log_success() { printf "${GREEN} [azure] ${NC} %s\n" "$1"; }
