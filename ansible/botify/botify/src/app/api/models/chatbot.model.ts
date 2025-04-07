@@ -100,11 +100,23 @@ export const updateChatbot = async (chatbotData: ChatbotDataInterface) => {
 
   try {
     // Update details table
-    if (name || welcome_message || fallback_message) {
+    if (
+      name ||
+      welcome_message ||
+      fallback_message ||
+      offline_fallback_notification_email ||
+      color ||
+      website_url
+    ) {
       const updates: any = {};
       if (name) updates.name = name;
       if (welcome_message) updates.welcome_message = welcome_message;
       if (fallback_message) updates.fallback_message = fallback_message;
+      if (color) updates.color = color;
+      if (website_url) updates.website_url = website_url;
+      if (offline_fallback_notification_email)
+        updates.offline_fallback_notification_email =
+          offline_fallback_notification_email;
 
       const { error: detailsError } = await client
         .from("details")
@@ -125,11 +137,15 @@ export const updateChatbot = async (chatbotData: ChatbotDataInterface) => {
     }
 
     // Update settings table
-    if (color !== undefined || offline_fallback_notification_email !== undefined) {
+    if (
+      color !== undefined ||
+      offline_fallback_notification_email !== undefined
+    ) {
       const updates: any = {};
       if (color !== undefined) updates.color = color;
       if (offline_fallback_notification_email !== undefined) {
-        updates.offline_fallback_notification_email = offline_fallback_notification_email.trim();
+        updates.offline_fallback_notification_email =
+          offline_fallback_notification_email.trim();
       }
 
       const { error: settingsError } = await client

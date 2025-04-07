@@ -13,8 +13,6 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    
-
     const res = await updateChatbot(chatbotData);
 
     return NextResponse.json(
