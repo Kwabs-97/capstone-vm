@@ -1,6 +1,6 @@
 - hosts: main
   roles:
-    - hostname
-    - essentials
+    # - hostname
+    # - essentials
     # - security
-  
+    - docker
