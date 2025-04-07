@@ -169,7 +169,8 @@ function Chatbot({ chatbotData }: DetailsProps) {
                   <label htmlFor="welcome_message">
                     Customize your welcome message
                   </label>
-                 {isGenerating ? <LoadingSpinner className="text-blue-500" /> : <GenerateWithAI genWithAI={handleGenerateWithAI} error={error} />} 
+                  <GenerateWithAI />
+                 {/* {isGenerating ? <LoadingSpinner className="text-blue-500" /> : <GenerateWithAI genWithAI={handleGenerateWithAI} error={error} />}  */}
                 </div>
 
                 <Textarea
@@ -183,7 +184,8 @@ function Chatbot({ chatbotData }: DetailsProps) {
                   <label htmlFor="fallback_message">
                     Customize your fallback message
                   </label>
-                  {isGeneratingfallback ? <LoadingSpinner className="text-blue-500" /> : <GenerateWithAI genWithAI={handleGenerateFallbackMessageWithAI} error={errorFallback} />} 
+                  <GenerateWithAI />
+                  {/* {isGeneratingfallback ? <LoadingSpinner className="text-blue-500" /> : <GenerateWithAI genWithAI={handleGenerateFallbackMessageWithAI} error={errorFallback} />}  */}
                 </div>
                 <Textarea
                   name="fallback_message"

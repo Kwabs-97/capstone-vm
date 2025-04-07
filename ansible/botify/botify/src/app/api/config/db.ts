@@ -1,4 +1,4 @@
-import { Client } from "pg";
+import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 
 // Function to read the content of secret files
@@ -12,44 +12,25 @@ function readSecretFile(filePath: string) {
 }
 
 // Read secrets from files based on environment variables
-const dbUser = 
-process.env.DATABASE_USERNAME_FILE ? 
+const dbUser = process.env.DATABASE_USERNAME_FILE ? 
   readSecretFile(process.env.DATABASE_USERNAME_FILE) : 
   process.env.DATABASE_USERNAME;
 
-const dbPassword = 
-process.env.DATABASE_PASSWORD_FILE ? 
+const dbPassword = process.env.DATABASE_PASSWORD_FILE ? 
   readSecretFile(process.env.DATABASE_PASSWORD_FILE) : 
-  process.env.DATABASE_PASSWORD?.toString();
+  process.env.DATABASE_PASSWORD;
 
-const dbName = process.env.DATABASE_NAME_FILE 
-? 
+const dbName = process.env.DATABASE_NAME_FILE ? 
   readSecretFile(process.env.DATABASE_NAME_FILE) : 
   process.env.DATABASE_NAME;
 
-const dbHost = process.env.DATABASE_HOST_FILE 
-? 
+const dbHost = process.env.DATABASE_HOST_FILE ? 
   readSecretFile(process.env.DATABASE_HOST_FILE) : 
   process.env.DATABASE_HOST;
 
-// Create client with the file contents
-try {
-  
-  const client = new Client({
-    host: process.env.DATABASE_HOST,
-    port: 5432, // Connect to the exposed port
-    user: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
-    ssl: {
-      rejectUnauthorized: false
-    }
-  });
-} catch (error) {
-  console.log("Error creating client:", error); 
-}
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const client = createClient(supabaseUrl, supabaseKey);
 
-
-
-
-
+export default client;

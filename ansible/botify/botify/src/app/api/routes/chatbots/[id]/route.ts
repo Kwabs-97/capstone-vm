@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
         { status: 404 }
       );
     }
+    console.log(`----------chatbot with ${id} fetched successfully------------`)
     return NextResponse.json({ message: "success", chatbot }, { status: 200 });
   } catch (error) {
     console.log(error);

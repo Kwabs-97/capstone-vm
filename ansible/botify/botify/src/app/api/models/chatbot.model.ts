@@ -1,32 +1,35 @@
-
+import client from "../config/db";
 import { ChatbotDataInterface } from "@/app/types";
 
 // Get a chatbot by its ID
 export const getChatbotById = async (id: string) => {
-  const res = await client.query(
-    `SELECT name, last_trained, isvisible, islive, welcome_message, fallback_message, website_url, color, offline_fallback_notification_email
-     FROM details
-     LEFT JOIN data_source ON details.id = data_source.chatbot_id
-     LEFT JOIN settings ON details.id = settings.chatbot_id
-     WHERE details.id = $1`,
-    [id]
-  );
+  const { data, error } = await client
+    .from("details")
+    .select(
+      `
+      name, last_trained, isVisible, isLive, welcome_message, fallback_message, website_url, color, offline_fallback_notification_email
+    `
+    )
+    .eq("id", id)
+    .single();
 
-  if (!res.rows) return null;
-  return res.rows[0];
+  if (error) {
+    console.error("Error fetching chatbot by ID:", error);
+    return null;
+  }
+  return data;
+  console.log(data)
 };
 
 // Get all chatbots
 export const getAllChatbots = async () => {
-  try {
-    const res = await client.query("SELECT * FROM details");
-    const chatbots = res.rows;
-    if (!chatbots) return null;
-    return chatbots;
-  } catch (error) {
+  const { data, error } = await client.from("details").select("*");
+
+  if (error) {
     console.error("Error fetching all chatbots:", error);
     throw new Error("Failed to fetch all chatbots");
   }
+  return data;
 };
 
 // Create a new chatbot
@@ -46,30 +49,32 @@ export const createChatbot = async (chatbotData: ChatbotDataInterface) => {
     } = chatbotData;
 
     // Insert into details table
-    const result1 = await client.query(
-      "INSERT INTO details (name, welcome_message, fallback_message) VALUES ($1, $2, $3) RETURNING *",
-      [name, welcome_message, fallback_message]
-    );
+    const { data: detailsData, error: detailsError } = await client
+      .from("details")
+      .insert([{ name, welcome_message, fallback_message }])
+      .select()
+      .single();
 
-    const id: string = result1.rows[0].id;
-    console.log("Created chatbot ID:", id);
+    if (detailsError) throw detailsError;
+
+    const id = detailsData.id;
 
     // Insert into data_source table
-    const result2 = await client.query(
-      "INSERT INTO data_source (chatbot_id, website_url) VALUES ($1, $2) RETURNING *",
-      [id, website_url]
-    );
+    const { error: dataSourceError } = await client
+      .from("data_source")
+      .insert([{ chatbot_id: id, website_url }]);
+
+    if (dataSourceError) throw dataSourceError;
 
     // Insert into settings table
-    const result3 = await client.query(
-      "INSERT INTO settings (chatbot_id, color, offline_fallback_notification_email) VALUES ($1, $2, $3) RETURNING *",
-      [id, color, offline_fallback_notification_email]
-    );
+    const { error: settingsError } = await client
+      .from("settings")
+      .insert([{ chatbot_id: id, color, offline_fallback_notification_email }]);
+
+    if (settingsError) throw settingsError;
 
     return {
-      details: result1.rows[0],
-      data_source: result2.rows[0],
-      settings: result3.rows[0],
+      details: detailsData,
     };
   } catch (error) {
     console.error("Error creating chatbot:", error);
@@ -88,75 +93,51 @@ export const updateChatbot = async (chatbotData: ChatbotDataInterface) => {
     name,
     id,
   } = chatbotData;
-  
+
   if (!id) {
     throw new Error("Chatbot ID is missing");
   }
 
   try {
-    // Only update details if relevant fields are provided
+    // Update details table
     if (name || welcome_message || fallback_message) {
-      const detailsFields = [];
-      const values = [];
-      let valueCount = 1;
+      const updates: any = {};
+      if (name) updates.name = name;
+      if (welcome_message) updates.welcome_message = welcome_message;
+      if (fallback_message) updates.fallback_message = fallback_message;
 
-      if (name) {
-        detailsFields.push(`name = $${valueCount}`);
-        values.push(name);
-        valueCount++;
-      }
-      if (welcome_message) {
-        detailsFields.push(`welcome_message = $${valueCount}`);
-        values.push(welcome_message);
-        valueCount++;
-      }
-      if (fallback_message) {
-        detailsFields.push(`fallback_message = $${valueCount}`);
-        values.push(fallback_message);
-        valueCount++;
-      }
+      const { error: detailsError } = await client
+        .from("details")
+        .update(updates)
+        .eq("id", id);
 
-      if (detailsFields.length > 0) {
-        values.push(id);
-        await client.query(
-          `UPDATE details SET ${detailsFields.join(', ')} WHERE id = $${valueCount} RETURNING *`,
-          values
-        );
-      }
+      if (detailsError) throw detailsError;
     }
 
-    // Only update data_source if website_url is provided
+    // Update data_source table
     if (website_url !== undefined) {
-      await client.query(
-        "UPDATE data_source SET website_url = $1 WHERE chatbot_id = $2 RETURNING *",
-        [website_url, id]
-      );
+      const { error: dataSourceError } = await client
+        .from("data_source")
+        .update({ website_url })
+        .eq("chatbot_id", id);
+
+      if (dataSourceError) throw dataSourceError;
     }
 
-    // Only update settings if relevant fields are provided
+    // Update settings table
     if (color !== undefined || offline_fallback_notification_email !== undefined) {
-      const settingsFields = [];
-      const values = [];
-      let valueCount = 1;
-
-      if (color !== undefined) {
-        settingsFields.push(`color = $${valueCount}`);
-        values.push(color);
-        valueCount++;
-      }
+      const updates: any = {};
+      if (color !== undefined) updates.color = color;
       if (offline_fallback_notification_email !== undefined) {
-        settingsFields.push(`offline_fallback_notification_email = $${valueCount}`);
-        values.push(offline_fallback_notification_email?.trim());
-        valueCount++;
+        updates.offline_fallback_notification_email = offline_fallback_notification_email.trim();
       }
 
-      if (settingsFields.length > 0) {
-        values.push(id);
-        await client.query(
-          `UPDATE settings SET ${settingsFields.join(', ')} WHERE chatbot_id = $${valueCount} RETURNING *`,
-          values
-        );
-      }
+      const { error: settingsError } = await client
+        .from("settings")
+        .update(updates)
+        .eq("chatbot_id", id);
+
+      if (settingsError) throw settingsError;
     }
 
     // Return updated data

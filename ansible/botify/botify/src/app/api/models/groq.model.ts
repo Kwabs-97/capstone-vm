@@ -1,9 +1,8 @@
 import { ChatGroq } from "@langchain/groq";
-import { ChatOllama } from "@langchain/ollama";
-
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-const model = new ChatOllama({
-  model: "llama3.2",
+const model = new ChatGroq({
+  temperature: 2,
+  model: "mixtral-8x7b-32768",
 });
 
 export async function generateWelcomeMessage(companyName: string) {
