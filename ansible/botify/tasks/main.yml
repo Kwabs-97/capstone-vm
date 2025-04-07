@@ -1,0 +1,20 @@
+- name: Create a services' directory
+  file:
+    path: /home/kwabs/services
+    state: directory
+    mode: '755'
+  become: yes
+
+- name: Copy botify services' folder
+  copy:
+    src: botify
+    dest: /home/kwabs/services/botify
+    owner: kwabs
+    group: kwabs
+    mode: '755'
+  become: yes
+
+- name: start botify
+  shell: |
+    cd /home/kwabs/services/botify && docker compose down && docker compose up -d
+  become: yes
