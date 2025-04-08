@@ -6,3 +6,4 @@
     # - docker
     - botify
     # - nsg
+    - nginx-reverse-proxy

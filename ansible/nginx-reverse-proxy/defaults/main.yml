@@ -1,0 +1,3 @@
+nginx_sites:
+  - server_name: titan-vm.cloud
+    port: 3000

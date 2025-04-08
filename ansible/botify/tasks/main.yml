@@ -7,7 +7,7 @@
 
 - name: Sync botify folder to remote
   synchronize:
-    src: ./botify/
+    src: ./files/botify/
     dest: /home/kwabs/services/botify/
     recursive: yes
   become: yes

@@ -1,0 +1,45 @@
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Create SSL directory
+  ansible.builtin.file:
+    path: /etc/nginx/ssl
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Copy wildcard certificate
+  ansible.builtin.copy:
+    src: ./files/certs
+    dest: /etc/nginx/ssl/
+    mode: '0644'
+  become: yes
+
+- name: Deploy Nginx site configs
+  ansible.builtin.template:
+    src: site.conf.j2
+    dest: "/etc/nginx/sites-available/{{ item.server_name }}.conf"
+  loop: "{{ nginx_sites }}"
+  notify: Reload Nginx
+  become: yes
+
+- name: Enable site configs
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ item.server_name }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ item.server_name }}.conf"
+    state: link
+    force: yes
+  loop: "{{ nginx_sites }}"
+  notify: Reload Nginx
+  become: yes
+
+- name: Ensure Nginx is enabled and started
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+  become: yes

@@ -1,0 +1,21 @@
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    server_name {{ item.server_name }};
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS proxy
+server {
+    listen 443 ssl;
+    server_name {{ item.server_name }};
+
+    ssl_certificate /etc/nginx/ssl/certs/cloud.pem;
+    ssl_certificate_key /etc/nginx/ssl/certs/cloud-key.pem;
+
+    location / {
+        proxy_pass http://localhost:{{ item.port }};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
