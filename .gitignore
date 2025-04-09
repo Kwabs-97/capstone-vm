@@ -2,3 +2,5 @@
 venv
 node_modules
 secrets
+notes
+.vault_password

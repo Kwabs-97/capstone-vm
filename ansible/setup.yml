@@ -4,6 +4,8 @@
     # - essentials
     # - security
     # - docker
-    - botify
+    # - botify
     # - nsg
     # - nginx-reverse-proxy
+    # - mariadb
+    - grafana
