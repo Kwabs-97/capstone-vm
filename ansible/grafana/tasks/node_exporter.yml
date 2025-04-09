@@ -1,0 +1,49 @@
+- name: Download Node Exporter
+  ansible.builtin.get_url:
+    url: "{{ node_exporter_download_url }}"
+    dest: "/tmp/node_exporter.tar.gz"
+  become: yes
+
+- name: Extract Node Exporter
+  ansible.builtin.unarchive:
+    src: "/tmp/node_exporter.tar.gz"
+    dest: "/tmp"
+    remote_src: yes
+  become: yes
+
+- name: Move Node Exporter binary
+  ansible.builtin.copy:
+    remote_src: yes
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+    dest: "{{ node_exporter_install_dir }}/node_exporter"
+    mode: '0755'
+  become: yes
+
+- name: Create systemd unit for Node Exporter
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/node_exporter.service
+    content: |
+      [Unit]
+      Description=Node Exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ node_exporter_install_dir }}/node_exporter
+      Restart=always
+      User=root
+
+      [Install]
+      WantedBy=multi-user.target
+  become: yes
+
+- name: Reload systemd daemon (Node Exporter)
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Enable and start Node Exporter service
+  ansible.builtin.service:
+    name: node_exporter
+    state: started
+    enabled: yes
+  become: yes

@@ -6,6 +6,7 @@
     # - docker
     # - botify
     # - nsg
-    # - nginx-reverse-proxy
+    - nginx-reverse-proxy
     # - mariadb
-    - grafana
+    # - grafana
+    - prometheus

@@ -1,3 +1,7 @@
 nginx_sites:
-  - server_name: titan-vm.cloud
+  - server_name: vmbotify.cloud
     port: 3000
+  - server_name: vmprometheus.cloud
+    port: 9090
+  - server_name: vmgrafana.cloud
+    port: 8000

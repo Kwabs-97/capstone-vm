@@ -5,7 +5,7 @@ server {
     return 301 https://$host$request_uri;
 }
 
-# HTTPS proxy
+# HTTPS proxy for Grafana
 server {
     listen 443 ssl;
     server_name {{ item.server_name }};
@@ -18,4 +18,20 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
+}
+
+# HTTPS proxy for Prometheus
+server {
+    listen 443 ssl;
+    server_name prometheus.{{ item.server_name }};
+
+    ssl_certificate /etc/nginx/ssl/certs/cloud.pem;
+    ssl_certificate_key /etc/nginx/ssl/certs/cloud-key.pem;
+
+    location / {
+        proxy_pass http://localhost:9090;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
 }

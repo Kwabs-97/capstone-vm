@@ -1,4 +1,7 @@
-loki_version: "2.9.2"
+loki_version: "2.9.3"
 loki_download_url: "https://github.com/grafana/loki/releases/download/v{{ loki_version }}/loki-linux-amd64.zip"
 loki_install_dir: "/usr/local/bin"
-loki_config_path: "/etc/loki/loki-config.yaml"
+loki_config_path: /etc/loki/loki-config.yaml
+node_exporter_version: "1.7.0"
+node_exporter_download_url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+node_exporter_install_dir: "/usr/local/bin"

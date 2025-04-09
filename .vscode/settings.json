@@ -1,6 +1,5 @@
 {
     "yaml.schemas": {
-        "file:///home/kwabena/.vscode/extensions/docsmsft.docs-yaml-1.0.5/dist/toc.schema.json": "/toc\\.yml/i",
         "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json": "file:///home/kwabena/Desktop/other/capstone-vm/ansible/grafana/tasks/loki.yml"
     }
 }
