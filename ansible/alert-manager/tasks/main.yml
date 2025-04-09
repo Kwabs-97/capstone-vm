@@ -1,0 +1,95 @@
+- name: Ensure necessary packages are installed
+  ansible.builtin.apt:
+    name: curl
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Create Alertmanager config directory
+  ansible.builtin.file:
+    path: "{{ alertmanager_config_dir }}"
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Download Alertmanager
+  ansible.builtin.get_url:
+    url: "{{ alertmanager_download_url }}"
+    dest: "/tmp/alertmanager.tar.gz"
+  become: yes
+
+- name: Extract Alertmanager
+  ansible.builtin.unarchive:
+    src: "/tmp/alertmanager.tar.gz"
+    dest: "/tmp"
+    remote_src: yes
+  become: yes
+
+- name: Move Alertmanager binaries
+  ansible.builtin.copy:
+    src: "/tmp/alertmanager-{{ alertmanager_version }}.linux-amd64/alertmanager"
+    dest: "{{ alertmanager_install_dir }}/alertmanager"
+    mode: '0755'
+    remote_src: yes
+  become: yes
+
+- name: Move amtool binary
+  ansible.builtin.copy:
+    src: "/tmp/alertmanager-{{ alertmanager_version }}.linux-amd64/amtool"
+    dest: "{{ alertmanager_install_dir }}/amtool"
+    mode: '0755'
+    remote_src: yes
+  become: yes
+
+- name: Create Alertmanager config file
+  ansible.builtin.copy:
+    dest: "{{ alertmanager_config_path }}"
+    content: |
+      global:
+        resolve_timeout: 5
+      route:
+        receiver: 'slack-notifications
+      receivers:
+        - name: 'slack-notifications'
+          slack_configs:
+            - send_resolved: true
+              username: 'Prometheus'
+              channel: '#monitoring'
+              api_url: 'https://hooks.slack.com/services/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'
+  become: yes
+
+- name: Create systemd service for Alertmanager
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/alertmanager.service
+    content: |
+      [Unit]
+      Description=Alertmanager
+      After=network.target
+      [Service]
+      ExecStart={{ alertmanager_install_dir }}/alertmanager \
+        --config.file={{ alertmanager_config_path }} \
+        --storage.path=/var/lib/alertmanager
+      Restart=always
+      User=root
+      [Install]
+      WantedBy=multi-user.target
+  become: yes
+
+- name: Create storage directory
+  ansible.builtin.file:
+    path: /var/lib/alertmanager
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Reload systemd and start Alertmanager
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Enable and start Alertmanager
+  ansible.builtin.service:
+    name: alertmanager
+    state: started
+    enabled: yes
+  become: yes

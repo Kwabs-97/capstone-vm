@@ -1,0 +1,1 @@
+alertmanager_config_path: "/etc/alertmanager/alertmanager.yml"
