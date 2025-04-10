@@ -1,3 +1,4 @@
+- include_tasks: azure.yml
 - name: NSG for running containers
   azure.azcollection.azure_rm_securitygroup:
     resource_group: "{{ resource_group }}"
@@ -12,6 +13,7 @@
         destination_port_range: '8080'
         source_address_prefix: '*'
         destination_address_prefix: '*'
+
       - name: AllowApp5000
         protocol: Tcp
         direction: Inbound
@@ -21,6 +23,7 @@
         destination_port_range: '5000'
         source_address_prefix: '*'
         destination_address_prefix: '*'
+
       - name: AllowApp3000
         protocol: Tcp
         direction: Inbound
@@ -30,6 +33,7 @@
         destination_port_range: '3000'
         source_address_prefix: '*'
         destination_address_prefix: '*'
+
       - name: AllowApp4000
         protocol: Tcp
         direction: Inbound
@@ -39,4 +43,5 @@
         destination_port_range: '4000'
         source_address_prefix: '*'
         destination_address_prefix: '*'
+
   become: yes

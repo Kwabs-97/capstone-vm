@@ -8,6 +8,7 @@
     # - nsg
     # - nginx-reverse-proxy
     # - mariadb
-    - alert-manager
-    - grafana
-    - prometheus
+    # - alert-manager
+    # - grafana
+    # - prometheus
+    - borg

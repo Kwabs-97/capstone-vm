@@ -1,0 +1,44 @@
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+  become: true
+
+- name: Add deadsnakes PPA
+  command: add-apt-repository ppa:deadsnakes/ppa
+  become: true
+
+# - name: Update apt cache
+#   apt:
+#     update_cache: yes
+#   become: true
+
+- name: Install Python 3.8
+  apt:
+    name: python3.8
+    state: present
+  become: true
+
+- name: Install pip and venv
+  apt:
+    name:
+      - python3-pip
+      - python3-venv
+    state: present
+  become: true
+
+- name: Install pipx
+  apt:
+    name: pipx
+    state: present
+  become: true
+
+- name: Install ansible[azure]
+  command: 
+    cmd: "pipx install ansible[azure]"
+  become: true
+
+- name: misc task on ubuntu 18.04 instance
+  debug: var=ansible_host
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
