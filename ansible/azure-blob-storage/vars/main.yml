@@ -1,0 +1,4 @@
+mount_point: "/mnt/azureblob"
+config_dir: "/etc/blobfuse2"
+config_file: "blobfuse2.yaml"
+sas_url: "https://bckups.blob.core.windows.net/backups?sp=racwdl&st=2025-04-10T05:57:09Z&se=2025-05-05T13:57:09Z&spr=https&sv=2024-11-04&sr=c&sig=PezLsGuITw4RYCvW1qxfKmKTCKVD%2BgIwMbKn5TL%2BGCA%3D"

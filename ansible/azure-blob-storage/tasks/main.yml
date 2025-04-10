@@ -1,0 +1,50 @@
+- name: Install dependencies
+  apt:
+    name:
+      - fuse3
+      - wget
+    update_cache: yes
+
+- name: Add Microsoft package repository
+  shell: |
+    wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+    dpkg -i packages-microsoft-prod.deb
+  args:
+    creates: /etc/apt/sources.list.d/microsoft-prod.list
+- name: Install blobfuse2
+  apt:
+    name: blobfuse2
+    update_cache: yes
+- name: Create mount and config directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ mount_point }}"
+    - "{{ config_dir }}"
+- name: Create blobfuse2 config file
+  copy:
+    dest: "{{ config_dir }}/{{ config_file }}"
+    content: |
+      version: 2
+      logging:
+        type: syslog
+        level: LOG_INFO
+      components:
+        - libfuse
+        - attr_cache
+        - azstorage
+      azstorage:
+        type: block
+        account_url: "{{ sas_url }}"
+      mount:
+        path: "{{ mount_point }}"
+- name: Mount the blob storage
+  command: >
+    blobfuse2 mount {{ mount_point }} --config-file={{ config_dir }}/{{ config_file }}
+  register: mount_output
+  changed_when: "'Successfully mounted' in mount_output.stdout"
+- name: Display mount result
+  debug:
+    var: mount_output.stdout
