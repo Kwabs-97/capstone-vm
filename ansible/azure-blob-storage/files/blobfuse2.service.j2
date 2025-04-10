@@ -1,0 +1,11 @@
+[Unit]
+Description=BlobFuse2 Mount
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/blobfuse2 mount /mnt/storage --config-file=/etc/blobfuse2/config.yaml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
