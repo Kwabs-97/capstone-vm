@@ -6,3 +6,4 @@ notes
 .vault_password
 sas.txt
 config.yaml
+ansible/azure-blob-storage/vars/main.yml
