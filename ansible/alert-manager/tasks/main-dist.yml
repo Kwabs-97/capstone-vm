@@ -55,7 +55,7 @@
             - send_resolved: true
               username: 'Prometheus'
               channel: '#monitoring'
-              api_url: 'https://hooks.slack.com/services/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'
+              api_url: 'slack webhook url'
   become: yes
 
 - name: Create systemd service for Alertmanager
