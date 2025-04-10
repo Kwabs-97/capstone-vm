@@ -1,4 +1,7 @@
-mount_point: "/mnt/azureblob"
+mount_point: <mount_point_here>
 config_dir: "/etc/blobfuse2"
 config_file: "blobfuse2.yaml"
-sas_url: "your sas url here"
+account_name: <storage_account_name_here>
+container: <container_name_here>
+
+sas_token: <sas_token_here>

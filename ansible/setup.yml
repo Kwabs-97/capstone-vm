@@ -11,5 +11,5 @@
     # - alert-manager
     # - grafana
     # - prometheus
-    # - borg
-    - azure-blob-storage
+    - borg
+    # - azure-blob-storage

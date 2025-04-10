@@ -1,0 +1,16 @@
+version: 2
+logging:
+  type: syslog
+  level: LOG_INFO
+components:
+  - libfuse
+  - attr_cache
+  - azstorage
+azstorage:
+  type: block
+  account_name: <account_name_here>
+  endpoint: "https://bckups.blob.core.windows.net/"
+  account_url: <account_url_here>
+  container: backups           
+mount:
+  path: "{{ mount_point }}"

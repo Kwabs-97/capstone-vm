@@ -80,6 +80,7 @@
     mode: '600'
   become: yes
 
+
 - name: add borgmatic backup to crontab
   ansible.builtin.cron:
     name: borgmatic backup
