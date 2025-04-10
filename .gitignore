@@ -8,3 +8,4 @@ sas.txt
 config.yaml
 ansible/azure-blob-storage/vars/main.yml
 ansible/alert-manager/tasks/main.yml
+ansible/azure-blob-storage/files/config.yml
