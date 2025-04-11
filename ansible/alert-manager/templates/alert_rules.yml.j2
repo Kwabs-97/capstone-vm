@@ -24,7 +24,6 @@ receivers:
         channel: '{{ slack_channel }}'
         api_url: '{{ slack_webhook_url }}'
 
-  - name: 'email-alerts'
+  - name: 'email-receiver'
     email_configs:
-      - to: '{{ email_to }}'
-        send_resolved: true
+      - to: 'thisissamuelyeboah@gmail.com'

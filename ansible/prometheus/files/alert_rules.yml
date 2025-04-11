@@ -9,7 +9,8 @@ groups:
         annotations:
           summary: "Instance {{ $labels.instance }} is down"
           description: "{{ $labels.instance }} has been unreachable for more than 1 minute."
-          
+
+ 
       - alert: HighCPUUsage
         expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
         for: 2m
@@ -27,3 +28,13 @@ groups:
         annotations:
           summary: "High container memory usage"
           description: "Container {{ $labels.container }} on {{ $labels.instance }} is using over 500MB of RAM."
+
+  - name: test
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down" 
