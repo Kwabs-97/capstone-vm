@@ -1,7 +1,10 @@
 nginx_sites:
-  - { server_name: "vmbotify.cloud", port: 3000, service: "grafana" }   # Existing Grafana
+  - { server_name: "vmbotify.cloud", port: 3000, service: "botify" } 
   - { server_name: "vmprometheus.cloud", port: 9090, service: "prometheus" }
-  - { server_name: "vmgrafana.cloud", port: 8000, service: "custom-app" }  # Different port
+  - { server_name: "vmgrafana.cloud", port: 8000, service: "grafana" }
+  - { server_name: "vmtraefik.cloud", port: 3001, service: "traefik"}
+  - { server_name: "vmcadvisor.cloud", port: 8080, service: "cadvisor"} 
+  - { server_name: "vmalertmanager.cloud", port: 9093, service: "alertmanager"}
 ssl_certs:
   src_dir: "files/certs"
   dest_dir: "/etc/nginx/ssl/certs"

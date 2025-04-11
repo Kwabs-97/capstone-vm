@@ -1,0 +1,30 @@
+- name: Copy Traefik service folder
+  ansible.builtin.copy:
+    src: traefik
+    dest: /home/kwabs/services
+    owner: kwabs
+    group: kwabs
+    mode: '755'
+  become: yes
+
+- name: Copy certificates
+  ansible.builtin.copy:
+    src: files/certs
+    dest: /
+    owner: kwabs
+    group: kwabs
+    mode: '600'
+  become: yes
+
+
+- name: Create Docker network 'web'
+  community.general.docker_network:
+    name: web
+    state: present
+  become: yes
+
+
+- name: Restart Traefik container
+  shell: |
+    cd /home/kwabs/services/traefik && docker compose down && docker compose up -d
+  become: yes

@@ -1,0 +1,30 @@
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "8080:8080"
+    networks:
+      - web
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:ro"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+      - "/dev/disk/:/dev/disk:ro"
+    devices:
+      - "/dev/kmsg"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${CADVISOR_HOSTNAME}`)"
+      - "traefik.http.routers.${SERVICE}.entrypoints=https"
+      - "traefik.http.routers.${SERVICE}.tls=true"
+      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-allowlist"
+      - "traefik.http.middlewares.${SERVICE}-allowlist.ipallowlist.sourcerange=0.0.0.0/0"
+      - "traefik.http.services.${SERVICE}.loadbalancer.server.port=8080"
+networks:
+  web:
+    external: true

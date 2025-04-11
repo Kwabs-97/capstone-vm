@@ -1,0 +1,9 @@
+tls:
+  certificates:
+    - certFile: /certs/cloud.pem
+      keyFile: /certs/cloud-key.pem
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/cloud.pem
+        keyFile: /certs/cloud-key.pem

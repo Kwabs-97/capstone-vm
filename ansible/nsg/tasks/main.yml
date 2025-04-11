@@ -1,10 +1,9 @@
-- include_tasks: azure.yml
 - name: NSG for running containers
   azure.azcollection.azure_rm_securitygroup:
     resource_group: "{{ resource_group }}"
     name: "{{ nsg }}"
     rules:
-      - name: AllowApp8080
+      - name: cAdvisor
         protocol: Tcp
         direction: Inbound
         access: Allow
@@ -14,33 +13,33 @@
         source_address_prefix: '*'
         destination_address_prefix: '*'
 
-      - name: AllowApp5000
+      - name: Botify
         protocol: Tcp
         direction: Inbound
         access: Allow
         priority: 1010
         source_port_range: '*'
-        destination_port_range: '5000'
+        destination_port_range: '3000'
         source_address_prefix: '*'
         destination_address_prefix: '*'
 
-      - name: AllowApp3000
+      - name: Traefik
         protocol: Tcp
         direction: Inbound
         access: Allow
         priority: 1020
         source_port_range: '*'
-        destination_port_range: '3000'
+        destination_port_range: '3001'
         source_address_prefix: '*'
         destination_address_prefix: '*'
 
-      - name: AllowApp4000
+      - name: Promethues
         protocol: Tcp
         direction: Inbound
         access: Allow
         priority: 1030
         source_port_range: '*'
-        destination_port_range: '4000'
+        destination_port_range: '9090'
         source_address_prefix: '*'
         destination_address_prefix: '*'
 

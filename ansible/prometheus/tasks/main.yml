@@ -84,6 +84,15 @@
     group: prometheus
     mode: '0644'
   become: yes
+
+- name: Add alert rules
+  ansible.builtin.copy:
+    src: files/alert_rules.yml
+    dest: /etc/prometheus/rules/alert_rules.yml
+    owner: prometheus
+    group: prometheus
+    mode: '644'
+  become: yes
   notify: restart prometheus
 
 - name: Create Prometheus systemd service
@@ -95,6 +104,7 @@
     mode: '0644'
   become: yes
   notify: restart prometheus
+
 
 - name: Enable and start Prometheus
   ansible.builtin.systemd:

@@ -1,0 +1,14 @@
+- name: copy cAdvisor service folder
+  ansible.builtin.copy:
+    src: cAdvisor
+    dest: /home/kwabs/services
+    owner: kwabs
+    group: kwabs
+    mode: '700'
+  become: yes 
+
+- name: start cAdvisor container
+  shell: |
+    cd /home/kwabs/services/cAdvisor && docker compose down && docker compose up -d
+  become: yes
+

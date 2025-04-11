@@ -7,12 +7,14 @@
     # - botify
     # - nsg
     # - nginx-reverse-proxy
+    # - traefik
     # - mariadb
-    # - alert-manager
+    - alert-manager
     # - grafana
-    # - prometheus
+    - prometheus
     # - borg
     # - azure-blob-storage
-- hosts: test_target
-  roles: 
-    - vm-borg
+    # - cAdvisor
+# - hosts: test_target
+#   roles: 
+#     - vm-borg
