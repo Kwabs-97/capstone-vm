@@ -12,4 +12,7 @@
     # - grafana
     # - prometheus
     # - borg
-    - azure-blob-storage
+    # - azure-blob-storage
+- hosts: test_target
+  roles: 
+    - vm-borg

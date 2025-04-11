@@ -1,7 +1,7 @@
 nginx_sites:
-  - server_name: vmbotify.cloud
-    port: 3000
-  - server_name: vmprometheus.cloud
-    port: 9090
-  - server_name: vmgrafana.cloud
-    port: 8000
+  - { server_name: "vmbotify.cloud", port: 3000, service: "grafana" }   # Existing Grafana
+  - { server_name: "vmprometheus.cloud", port: 9090, service: "prometheus" }
+  - { server_name: "vmgrafana.cloud", port: 8000, service: "custom-app" }  # Different port
+ssl_certs:
+  src_dir: "files/certs"
+  dest_dir: "/etc/nginx/ssl/certs"

@@ -1,0 +1,3 @@
+borg_repo_path: "/var/backup/repos/titan-vm"
+borg_repo_owner: 
+borg_passphrase: yourSuperSecretPass

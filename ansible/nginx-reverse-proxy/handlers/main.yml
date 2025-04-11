@@ -1,5 +1,11 @@
 - name: Reload Nginx
-  ansible.builtin.service:
+  systemd:
     name: nginx
     state: reloaded
+  become: yes
+
+- name: Restart Nginx
+  systemd:
+    name: nginx
+    state: restarted
   become: yes

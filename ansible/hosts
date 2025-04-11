@@ -1,2 +1,5 @@
 [main]
 titan-vm
+
+[test_target]
+test
