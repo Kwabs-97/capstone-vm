@@ -3,44 +3,44 @@
     resource_group: "{{ resource_group }}"
     name: "{{ nsg }}"
     rules:
-      - name: cAdvisor
+      - name: SSH
         protocol: Tcp
         direction: Inbound
         access: Allow
-        priority: 1000
+        priority: 300
         source_port_range: '*'
-        destination_port_range: '8080'
-        source_address_prefix: '*'
+        destination_port_range: '22'
+        source_address_prefix: '41.215.171.247'
+        destination_address_prefix: '*'
+      
+      - name: custom54412SSH
+        protocol: Tcp
+        direction: Inbound
+        access: Allow
+        priority: 1100
+        source_port_range: '*'
+        destination_port_range: '54412'
+        source_address_prefix: '41.215.171.247'
+        destination_address_prefix: '*'
+     
+      - name: AllowCidrBlockHTPPSInbound
+        protocol: Tcp
+        direction: Inbound
+        access: Allow
+        priority: 1110
+        source_port_range: '*'
+        destination_port_range: '443'
+        source_address_prefix: '41.215.171.247'
         destination_address_prefix: '*'
 
-      - name: Botify
-        protocol: Tcp
+      - name: ICMP
+        protocol: ICMP
         direction: Inbound
         access: Allow
-        priority: 1010
+        priority: 1120
         source_port_range: '*'
-        destination_port_range: '3000'
-        source_address_prefix: '*'
-        destination_address_prefix: '*'
-
-      - name: Traefik
-        protocol: Tcp
-        direction: Inbound
-        access: Allow
-        priority: 1020
-        source_port_range: '*'
-        destination_port_range: '3001'
-        source_address_prefix: '*'
-        destination_address_prefix: '*'
-
-      - name: Promethues
-        protocol: Tcp
-        direction: Inbound
-        access: Allow
-        priority: 1030
-        source_port_range: '*'
-        destination_port_range: '9090'
-        source_address_prefix: '*'
-        destination_address_prefix: '*'
+        destination_port_range: '*'
+        source_address_prefix: '41.215.171.247'
+        destination_address_prefix: '*'       
 
   become: yes
