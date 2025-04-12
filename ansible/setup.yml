@@ -9,12 +9,12 @@
     # - nginx-reverse-proxy
     # - traefik
     # - mariadb
-    - alert-manager
+    # - alert-manager
     # - grafana
-    - prometheus
-    # - borg
+    # - prometheus
+    - borg
     # - azure-blob-storage
     # - cAdvisor
-# - hosts: test_target
-#   roles: 
-#     - vm-borg
+- hosts: test_target
+  roles: 
+    - vm-borg

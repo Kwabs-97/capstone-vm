@@ -1,44 +1,45 @@
-# - name: Install NTP
-#   ansible.builtin.apt:
-#     name: ntp
-#     state: present
-#     update_cache: no
-#   become: yes
+- name: Install NTP
+  ansible.builtin.apt:
+    name: ntp
+    state: present
+    update_cache: no
+  become: yes
 
-# - name: Ensure NTP service is enabled and running
-#   ansible.builtin.service:
-#     name: ntp
-#     state: started
-#     enabled: yes
-#   become: yes
+- name: Ensure NTP service is enabled and running
+  ansible.builtin.service:
+    name: ntp
+    state: started
+    enabled: yes
+  become: yes
 
-# - name: Update apt cache
-#   ansible.builtin.apt:
-#     update_cache: yes
-#   become: yes
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  become: yes
 
-# - name: install packages
-#   ansible.builtin.apt:
-#     name:
-#       - borgbackup
-#       - borgmatic
-#       - python3-llfuse
-#     state: present
-#   become: yes
+- name: Install required packages
+  ansible.builtin.apt:
+    name:
+      - borgbackup
+      - borgmatic
+      - python3-llfuse
+    state: present
+  become: yes
 
-# - name: borgmatic directory
-#   ansible.builtin.file:
-#     path: /etc/borgmatic
-#     state: directory
-#     owner: root
-#     group: root
-#     mode: '0700'
-#   become: yes
+- name: Create borgmatic configuration directory
+  ansible.builtin.file:
+    path: /etc/borgmatic
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+  become: yes
 
-# - name: Add titan-vm public key to authorized_keys
-#   authorized_key:
-#     user: ubuntu
-#     key: "{{ hostvars['titan-vm']['titan_vm_public_key']['content'] | b64decode }}"
+- name: Add titan-vm root public key to ubuntu's authorized_keys
+  authorized_key:
+    user: ubuntu
+    key: "{{ hostvars['titan-vm']['titan_vm_root_public_key']['content'] | b64decode }}"
+  become: yes
 
 - name: Create backup repo directory
   file:
@@ -58,17 +59,8 @@
     group: root
   become: true
 
-- name: Copy env variable
+- name: Copy env variable for borgmatic
   ansible.builtin.copy:
     src: files/.env
     dest: /etc/borgmatic/env.d/.env
-  become: true 
-
-- name: Initialize borg repository (non-interactive)
-  ansible.builtin.shell: |
-    borg init --encryption=repokey {{ borg_repo_path }}
-  args:
-    creates: "{{ borg_repo_path }}/config"
   become: true
-  environment:
-    BORG_PASSPHRASE: "{{ borg_passphrase }}"
