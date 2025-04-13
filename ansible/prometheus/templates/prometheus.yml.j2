@@ -27,3 +27,7 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
     - targets: ['localhost:8080']
+
+  - job_name: 'borgbackup'
+    static_configs:
+      - targets: ['localhost:9776']  

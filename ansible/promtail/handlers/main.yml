@@ -1,0 +1,12 @@
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  become: yes
+  notify: Enable and start Promtail service
+  
+- name: Enable and start Promtail service
+  systemd:
+    name: promtail
+    state: started
+    enabled: yes
+  become: yes

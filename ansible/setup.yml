@@ -10,11 +10,12 @@
     # - traefik
     # - mariadb
     # - alert-manager
-    # - grafana
+    - grafana
     # - prometheus
-    - borg
+    # - borg
+    # - promtail
     # - azure-blob-storage
     # - cAdvisor
-- hosts: test_target
-  roles: 
-    - vm-borg
+# - hosts: test_target
+#   roles: 
+#     - vm-borg

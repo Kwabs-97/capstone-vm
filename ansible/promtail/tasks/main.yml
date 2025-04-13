@@ -1,0 +1,47 @@
+- name: Create promtail directory
+  file:
+    path: /etc/promtail
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Download Promtail binary
+  get_url:
+    url: "https://github.com/grafana/loki/releases/latest/download/promtail-linux-amd64.zip"
+    dest: "/tmp/promtail.zip"
+
+- name: Unzip Promtail
+  unarchive:
+    src: "/tmp/promtail.zip"
+    dest: "/tmp"
+    remote_src: yes
+  become: yes
+
+- name: Move Promtail binary to /usr/local/bin
+  command: mv /tmp/promtail-linux-amd64 /usr/local/bin/promtail
+  args:
+    creates: /usr/local/bin/promtail
+  become: yes
+
+- name: Make Promtail executable
+  file:
+    path: /usr/local/bin/promtail
+    mode: '0755'
+  become: yes
+
+- name: Create Promtail config file
+  copy:
+    src: files/config.yml
+    dest: "{{ promtail_config_path }}"
+    mode: '0644'
+  become: yes
+
+
+- name: Create systemd unit for promtail
+  ansible.builtin.template:
+    src: templates/promtail.service.j2
+    dest: /etc/systemd/system/promtail.service
+    mode: '0644'
+  notify: Reload systemd
+  become: yes
+

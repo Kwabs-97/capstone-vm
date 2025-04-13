@@ -1,0 +1,10 @@
+[Unit]
+Description=Promtail service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/promtail -config.file={{ promtail_config_path }}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

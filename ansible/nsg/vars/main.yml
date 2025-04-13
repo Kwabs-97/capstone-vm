@@ -1,2 +1,4 @@
 nsg: titan-vm-nsg
 resource_group: myResourceGroup
+allowed_ip_range: 41.215.0.0/16
+custom_port: 54412

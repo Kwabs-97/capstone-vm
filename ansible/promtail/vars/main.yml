@@ -1,0 +1,2 @@
+loki_host_url: "http://localhost:3100"
+promtail_config_path: "/etc/promtail/config.yml"
